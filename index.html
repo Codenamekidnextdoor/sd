@@ -1,0 +1,314 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Qoder Test Prompt Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;750&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: sticky fill-in panel on the left, phase-ordered prompt cards on the right; stacks on phones */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#17212b; --muted:#5a6876; --line:#d7dee5;
+  --accent:#0b6e7f; --accent-soft:#dff0f2; --warn:#a4501a; --warn-soft:#fbeadf;
+  --code-bg:#eef2f5;
+  --display:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10161c; --surface:#18212a; --ink:#e4eaf0; --muted:#97a6b4; --line:#2b3743;
+  --accent:#4fc1d2; --accent-soft:#163940; --warn:#f0a36e; --warn-soft:#3a2516;
+  --code-bg:#121a21; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10161c; --surface:#18212a; --ink:#e4eaf0; --muted:#97a6b4; --line:#2b3743;
+  --accent:#4fc1d2; --accent-soft:#163940; --warn:#f0a36e; --warn-soft:#3a2516;
+  --code-bg:#121a21; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr)}}
+header.top{max-width:1180px;margin:0 auto 22px}
+h1{font-family:var(--display);font-weight:750;font-size:1.9rem;letter-spacing:-.02em;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--muted);margin:0;max-width:70ch}
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px}
+@media (max-width:860px){aside{position:static}}
+aside h2{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0}
+label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;font-weight:600}
+input,textarea{font:inherit;font-size:.88rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%}
+textarea{font-family:var(--mono);font-size:.78rem;min-height:110px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible,.navlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:.78rem;color:var(--muted);margin:0}
+nav.phases{display:flex;flex-wrap:wrap;gap:6px}
+.navlink{font-size:.75rem;text-decoration:none;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:999px}
+main{display:flex;flex-direction:column;gap:30px;min-width:0}
+section.phase{display:flex;flex-direction:column;gap:12px}
+.phase-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:6px}
+.phase-head .clock{font-family:var(--mono);font-size:.78rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.phase-head h2{font-size:1.15rem;margin:0;font-weight:750}
+.phase-head p{margin:0;color:var(--muted);font-size:.85rem;flex-basis:100%}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.alt{border-left:4px solid var(--warn)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.card h3{margin:0;font-size:.98rem;font-weight:600}
+.when{font-size:.8rem;color:var(--muted);margin:0}
+pre{margin:0;background:var(--code-bg);border-radius:6px;padding:12px;font-family:var(--mono);font-size:.78rem;line-height:1.55;white-space:pre-wrap;word-break:break-word;overflow-x:auto;max-height:340px}
+pre mark{background:var(--warn-soft);color:var(--warn);border-radius:3px;padding:0 2px}
+button.copy{font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:6px;padding:4px 12px}
+button.copy:hover{background:var(--accent-soft)}
+button.copy.done{background:var(--accent);color:var(--surface)}
+.tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);background:var(--warn-soft);padding:2px 7px;border-radius:4px}
+.tips{background:var(--accent-soft);border-radius:10px;padding:12px 16px;font-size:.88rem}
+.tips ul{margin:6px 0 0;padding-left:18px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <h1>Qoder Test Prompt Kit</h1>
+  <p class="sub">COMS3011A test, 14:30–17:00. Fill in the fields on the left once you've read the brief; every prompt below updates. Highlighted text is filled from your fields. Copy, paste into Qoder, then read what comes back.</p>
+</header>
+
+<div class="wrap">
+<aside>
+  <h2>Fill in from the brief</h2>
+  <label for="v-app">App name / one-line summary
+    <input id="v-app" data-var="APP" value="a todo app">
+  </label>
+  <label for="v-stack">Stack
+    <input id="v-stack" data-var="STACK" value="Next.js (App Router) + SQLite via better-sqlite3">
+  </label>
+  <label for="v-node">Node version
+    <input id="v-node" data-var="NODE" value="22">
+  </label>
+  <label for="v-feature">Current feature (for slice prompts)
+    <input id="v-feature" data-var="FEATURE" value="archive a task">
+  </label>
+  <label for="v-done">Its "done when" / rubric line
+    <input id="v-done" data-var="DONE" value="an archived task leaves the active list but is still viewable">
+  </label>
+  <label for="v-rules">Hard constraints (one per line)
+    <textarea id="v-rules" data-var="RULES">- Never DELETE rows. Archive = archived_at timestamp (or is_archived flag) on the same row.
+- Overdue is DERIVED at read time from due_date + status, in the user's local timezone. Never a column, never a status.
+- Status is a fixed enum: todo, in_progress, complete. Enforce with a CHECK constraint.
+- Schema changes go through versioned migrations. Never drop and recreate tables.
+- Add indexes on columns we filter/sort by.
+- Fetch related data in one query, never one query per row.
+- One library per job. Ask before adding a dependency.
+- Tests hit a real throwaway SQLite database, never mocks.</textarea>
+  </label>
+  <p class="hint">Saved in this browser only. Edit the rules to match the actual brief.</p>
+  <nav class="phases" aria-label="Phases">
+    <a class="navlink" href="#p0">Read brief</a>
+    <a class="navlink" href="#p1">Plan</a>
+    <a class="navlink" href="#p2">Skeleton</a>
+    <a class="navlink" href="#p3">Features</a>
+    <a class="navlink" href="#p4">Push back</a>
+    <a class="navlink" href="#p5">Tests</a>
+    <a class="navlink" href="#p6">Docker</a>
+    <a class="navlink" href="#p7">Docs</a>
+    <a class="navlink" href="#p8">Debug</a>
+    <a class="navlink" href="#p9">Final check</a>
+  </nav>
+</aside>
+
+<main id="prompts"></main>
+</div>
+
+<script>
+const PHASES = [
+ {id:"p0", clock:"14:30–14:40", title:"Read the brief (no agent yet)", note:"Do this yourself. Turn every rubric line into a checklist item before typing a prompt.", cards:[
+  {t:"Turn the rubric into a checklist", when:"Paste the brief + rubric after this. Use it to plan, not to build.", p:`Below is my test brief and marking rubric. Do NOT write any code yet.
+
+1. List every requirement and rubric line as a checklist item, grouped as: must-have (marked pass/fail), graded quality (docs, tests, commits, DB design), and optional/bonus.
+2. For each item, write one sentence on how a marker will verify it.
+3. Flag anything ambiguous and tell me what you'd assume.
+4. Suggest the order to build in so I always have something submittable.
+
+BRIEF AND RUBRIC:
+<paste here>`}
+ ]},
+ {id:"p1", clock:"14:40–14:50", title:"Plan and lock the constraints", note:"Send the constraints prompt first. Re-send it at the start of every new chat.", cards:[
+  {t:"Constraints preamble", tag:"send first", when:"Start of the session and every new chat or task.", p:`Context for every task in this project:
+We are building {{APP}} with {{STACK}}, Node {{NODE}}. It must run from a clean clone using only the README.
+
+Hard constraints. Do not break these, and tell me if a request would require breaking one:
+{{RULES}}
+
+Working style:
+- Do one task at a time, then stop and summarise what you changed (files + why).
+- Don't refactor code I didn't ask you to touch.
+- If something is ambiguous, ask instead of guessing.
+Reply "understood" and list the constraints back in one line each.`},
+  {t:"Database design first", when:"Before any UI code.", p:`Design the database schema for {{APP}} only. No UI yet.
+
+Give me:
+1. The SQL for each table with column types, NOT NULL, DEFAULTs, CHECK constraints and foreign keys.
+2. Indexes, and which query each one serves.
+3. How archive and any derived values (e.g. overdue) are handled, consistent with the constraints.
+4. The relationships between tables in plain English (I'll use this in the docs).
+Put the schema in a migration file (migrations/001_init.sql) with a small migration runner that tracks applied versions in a schema_migrations table.`}
+ ]},
+ {id:"p2", clock:"14:50–15:20", title:"Skeleton running and pushed", note:"Goal: something submittable within 30 minutes. Push it.", cards:[
+  {t:"Minimal end-to-end skeleton", when:"Right after the schema is accepted.", p:`Set up the project skeleton for {{APP}} with {{STACK}}.
+Scope, nothing more:
+- Project scaffold, .gitignore (node_modules, .next, *.db, .env), .nvmrc with {{NODE}}.
+- DB connection module that runs migrations on startup. DB file path from env var DATABASE_PATH with a sensible default inside ./data/.
+- One page that lists items and one form that creates an item, end to end.
+- npm scripts: dev, build, start, test.
+Then tell me the exact commands to run it from a clean clone, and stop.`},
+  {t:"Core feature slice", when:"Each core/required feature, one at a time.", p:`Implement ONLY this feature: {{FEATURE}}.
+Done when: {{DONE}}.
+
+Remember the constraints (especially no DELETE and derived overdue).
+- Change the minimum set of files.
+- Add or update one test that proves the "done when" condition.
+- Run the tests and show me the result.
+Then list the files you changed and stop.`}
+ ]},
+ {id:"p3", clock:"15:20–16:25", title:"Features, one slice at a time", note:"Check each one in the browser, run the tests, commit, then start the next.", cards:[
+  {t:"Feature slice (general)", when:"Every extra feature.", p:`Next feature: {{FEATURE}}.
+Done when: {{DONE}}.
+
+Before writing code, tell me in 3–5 bullets: which tables/files change, whether a migration is needed, and any risk to existing features. Wait for my "go".
+After I say go: implement, add a test, run the full test suite, and report pass/fail.`},
+  {t:"Migration for a schema change", when:"Any feature that needs a new column or table.", p:`This feature needs a schema change. Write it as a NEW migration file (next version number). Use ALTER TABLE / CREATE TABLE only. Do not drop or recreate existing tables, and existing data must survive.
+Show me the migration, then confirm the app still starts against a database created by the previous migrations.`},
+  {t:"Check a feature against the rubric", when:"Before you tick it off.", p:`Act as the marker. Here is the rubric line for {{FEATURE}}: "{{DONE}}".
+Walk through exactly what a marker would click/run to verify it, from a fresh start. Tell me any step that would fail or only partly pass, with the file and line responsible. Don't fix anything yet.`}
+ ]},
+ {id:"p4", clock:"Any time", title:"Push back (keep these for the transcript)", note:"Specific corrections earn the AI-usage marks. Name the file, the problem and the fix.", cards:[
+  {t:"It broke a constraint", alt:true, when:"Agent stored derived data, deleted rows, added a status, etc.", p:`That breaks a project constraint. In <file>, you <what it did, e.g. "stored overdue as a column">.
+Fix: <what it must do instead, e.g. "derive overdue at read time from due_date and status in the user's timezone">.
+Remove the wrong approach completely (column, migration, code paths), add a test that would catch this mistake, and show me the diff.`},
+  {t:"It did too much", alt:true, when:"It touched files you didn't ask about.", p:`You changed more than I asked for. Revert your changes to <files> and keep only the changes needed for {{FEATURE}}. List what you reverted.`},
+  {t:"Duplicate library", alt:true, when:"A second package for the same job appeared.", p:`We already use <existing lib> for <job>. Remove <new lib> from package.json and rewrite that code to use <existing lib>. Run npm install and the tests afterwards.`},
+  {t:"N+1 or missing index", alt:true, when:"A list loads related data per row, or queries filter unindexed columns.", p:`The list view runs one query per row to load <related data>. Replace it with a single JOIN (or one IN query) and add an index on <column>. Show me the before/after SQL.`},
+  {t:"Wrong but unclear why", alt:true, when:"Behaviour is off and you're not sure of the cause.", p:`Expected: <what should happen>.
+Actual: <what happens, exact error or output>.
+Steps: <how to reproduce>.
+Find the cause before changing code. Explain it in two sentences, then propose the smallest fix.`}
+ ]},
+ {id:"p5", clock:"Throughout", title:"Tests", note:"Run them after every feature. Silent breakage is the main blitz risk.", cards:[
+  {t:"Set up the test suite", when:"Once, early.", p:`Set up tests so that "npm test" runs everything with one command.
+- Each test file creates a fresh throwaway SQLite database (temp file or :memory:) and runs the real migrations on it.
+- No mocking the database. No dependence on ./data or my working DB.
+- Tests must be deterministic: inject "now" / the clock instead of using the real current time.
+Write 3 starter tests that exercise real behaviour: create, archive (row still exists, hidden from active list), and the overdue rule. Run them and show output.`},
+  {t:"Awkward-case tests", when:"After the core works.", p:`Add tests for the awkward cases in {{APP}}:
+- overdue exactly at the user's local midnight (timezone edge)
+- a completed task past its due date is NOT overdue
+- archived items still retrievable; no code path issues DELETE
+- <any rule specific to this brief, e.g. recurrence on the 31st, dependency cycle>
+Run the suite twice in a row and show both passing.`}
+ ]},
+ {id:"p6", clock:"If required or time allows", title:"Docker (Lab 3 pattern)", note:"Check the brief: if it asks for Docker, do this right after the skeleton works.", cards:[
+  {t:"Dockerfile + compose", when:"When containerising.", p:`Containerise this app.
+Dockerfile:
+- Multi-stage: build stage runs npm ci + npm run build; runtime stage copies only what's needed to run.
+- Node {{NODE}} slim image (better-sqlite3 needs build tools: install python3/make/g++ in the build stage only).
+- Run as a non-root user. No credentials baked in. Bind HOST=0.0.0.0. NODE_ENV=production.
+- Add a .dockerignore (node_modules, .next, .git, .env, *.db, data/).
+compose.yml:
+- App service built from the Dockerfile, port published to the host.
+- Database/data on a NAMED volume so data survives docker compose down / up.
+- If using Postgres: official postgres image, pg_isready healthcheck, app depends_on with condition: service_healthy, DB host = service name (never localhost), DB port not published.
+- A healthcheck endpoint the app exposes.
+Then give me the exact commands to verify persistence across down/up.`},
+  {t:"Docker won't start", alt:true, when:"Container exits or can't reach the DB.", p:`docker compose up fails. Here are the last logs:
+<paste docker compose logs --tail=40>
+Diagnose the cause. Check specifically: HOST binding, DB hostname (must be the service name), healthcheck/depends_on ordering, file permissions for the non-root user on the volume, and native module builds. Give the smallest fix.`}
+ ]},
+ {id:"p7", clock:"16:25–16:35", title:"README and docs", note:"Docs are graded on accuracy against the shipped code.", cards:[
+  {t:"Write the README from the real code", when:"Once features are frozen.", p:`Write README.md by reading the actual repository, not from memory. Sections:
+1. Running It: Node {{NODE}}, then every exact command to install, run and test from a clean clone (and docker compose commands if we have Docker). No step may be missing.
+2. Third-Party Code: every dependency in package.json with one line on why it was chosen.
+3. Database Design: each table, its key columns, constraints, and the relationships between tables, matching the migrations exactly. Explain how archive and derived values work.
+4. Features: what's implemented, mapped to the brief's requirement names.
+Flag anything in the code that contradicts the docs instead of papering over it.`},
+  {t:"Good commit message", when:"After each working slice.", p:`Write a git commit message for the staged changes: a short imperative summary line (max 60 chars), a blank line, then 1–3 lines on what changed and why. No "update" or "fix stuff".`}
+ ]},
+ {id:"p8", clock:"Any time", title:"Debugging", note:"Give it the exact error. Ask for cause before fix.", cards:[
+  {t:"Error with stack trace", when:"Build, runtime or test failure.", p:`This fails:
+Command: <command>
+Output:
+<paste full error>
+
+Explain the root cause first (which file/line, why). Then give the smallest fix. Don't change unrelated code, and don't disable or skip tests to make it pass.`},
+  {t:"Works locally, fails from clone", when:"Clean-clone check fails.", p:`The app works in my working folder but fails from a fresh clone with:
+<error>
+Find what my working folder has that the repo doesn't: untracked files, .env values, a local database, global packages, a build artefact. Fix it so the README steps alone work.`}
+ ]},
+ {id:"p9", clock:"16:35–17:00", title:"Final check and submit", note:"No big agent tasks after 16:30. Push by 16:50.", cards:[
+  {t:"Pre-submission audit", when:"Around 16:35.", p:`Audit the repo for submission. Don't change code; report only.
+- Is anything committed that shouldn't be (node_modules, .next, *.db, .env)?
+- Does every README command exist in package.json and work?
+- Does any code path DELETE rows or store derived values?
+- Do all tests pass from "npm test" on a fresh clone?
+- Any rubric item from the checklist that isn't met?
+Give me a short list ordered by how many marks it risks.`},
+  {t:"Clean-clone commands (run these yourself)", when:"After the final push.", p:`cd /tmp && rm -rf testclone
+git clone <your gitea https url> testclone && cd testclone
+# then follow your README literally, e.g.
+npm ci && npm test && npm run build && npm start
+# or: docker compose up -d --build && docker compose ps`}
+ ]}
+];
+
+const VAR_RE = /\{\{(\w+)\}\}/g;
+const vals = {};
+const inputs = document.querySelectorAll("[data-var]");
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem("qoder-kit-vars") || "{}"); } catch(e) {}
+inputs.forEach(el => {
+  if (saved[el.dataset.var] != null) el.value = saved[el.dataset.var];
+  vals[el.dataset.var] = el.value;
+  el.addEventListener("input", () => {
+    vals[el.dataset.var] = el.value;
+    try { localStorage.setItem("qoder-kit-vars", JSON.stringify(vals)); } catch(e) {}
+    renderPrompts();
+  });
+});
+
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const fill = p => p.replace(VAR_RE, (_, k) => vals[k] ?? "");
+const fillHtml = p => esc(p).replace(VAR_RE, (_, k) => `<mark>${esc(vals[k] ?? "")}</mark>`);
+
+const main = document.getElementById("prompts");
+main.innerHTML = PHASES.map(ph => `
+  <section class="phase" id="${ph.id}">
+    <div class="phase-head"><span class="clock">${ph.clock}</span><h2>${ph.title}</h2><p>${ph.note}</p></div>
+    ${ph.cards.map((c,i) => `
+      <article class="card${c.alt ? " alt" : ""}">
+        <div class="card-top"><h3>${c.t}</h3>${c.tag ? `<span class="tag">${c.tag}</span>` : ""}
+          <button class="copy" type="button" data-k="${ph.id}-${i}">Copy</button></div>
+        <p class="when">${c.when}</p>
+        <pre data-k="${ph.id}-${i}"></pre>
+      </article>`).join("")}
+  </section>`).join("") + `
+  <div class="tips"><strong>Reminders</strong>
+    <ul>
+      <li>One checkable task per prompt. Read the diff before accepting.</li>
+      <li>Commit after every working slice; push every 20–30 minutes.</li>
+      <li>Save the Qoder chats you correct the agent in, in case transcripts are asked for.</li>
+      <li>Use the strong mode for structural work and a lighter one for small fixes to save quota.</li>
+    </ul></div>`;
+
+const lookup = {};
+PHASES.forEach(ph => ph.cards.forEach((c,i) => lookup[`${ph.id}-${i}`] = c.p));
+function renderPrompts(){
+  main.querySelectorAll("pre[data-k]").forEach(pre => pre.innerHTML = fillHtml(lookup[pre.dataset.k]));
+}
+renderPrompts();
+
+main.addEventListener("click", e => {
+  const b = e.target.closest("button.copy"); if (!b) return;
+  const text = fill(lookup[b.dataset.k]);
+  const ok = () => { b.textContent = "Copied"; b.classList.add("done"); setTimeout(() => { b.textContent = "Copy"; b.classList.remove("done"); }, 1400); };
+  const fallback = () => {
+    const pre = main.querySelector(`pre[data-k="${b.dataset.k}"]`);
+    const r = document.createRange(); r.selectNodeContents(pre);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    b.textContent = "Selected, press Ctrl+C";
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback);
+  else fallback();
+});
+</script>
+
+</body></html>
